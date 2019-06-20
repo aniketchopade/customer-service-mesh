@@ -1,5 +1,5 @@
 'use strict'
-const http = require('http')
+const request = require('request')
 const repository = (db) => {
   const collection = {
     "movies": "movies"
@@ -8,26 +8,37 @@ const repository = (db) => {
   const getLastRentalDetails = (customerid) => {
     return new Promise((resolve, reject) => {
 
-        http.get({
-          hostname: 'customer',
-          port: 80,
-          path: `/?customer=${customerid}`,
-          agent: false  // Create a new agent just for this one request
-        }, (res) => {
-          console.log(res)
-          resolve({
-            "customerId": "c768125",
-            "name": "Aniket Chopade",
-            "rentalNumber": "986522221",
-            "location": "JFK Airport",
-            "checkout": "Jun 20, 2019",
-            "checkin": "Jun 22, 2019",
-            "hoursOpen": "6:00:00 AM",
-            "hoursClose": "9:00:00 PM"
-          })
-        });
+      request(`customer?customer=${customerid}`, { json: true }, (err, res, cbody) => {
+        let lastrentalNumber = cbody.lastrentalNumber
+        let firstname = cbody.firstname
+        let lastname = cbody.lastname
+        
+        request(`rental?rental=${lastrentalNumber}`, { json: true }, (err, res, rbody) => {
+          let location = rbody.location
+          let rentalstartdate = rbody.rentalstartdate
+          let rentalenddate = rbody.rentalenddate
 
-     
+          request(`location?location=${location}`, { json: true }, (err, res, lbody) => {
+            let hoursOfOperation = lbody.hoursOfOperation
+
+            resolve({
+              "rentalNumber": lastrentalNumber,
+              "rentaldetails": {
+                "customerId": customerid,
+                "name": firstname,
+                "lastname": lastname,
+                "rentalstartdate": rentalstartdate,
+                "rentalenddate": rentalenddate,
+                "location": location,
+                "hoursofoperation": hoursOfOperation[1]
+              }
+
+            })
+          });
+
+          
+        });          
+      });
     })
   }
 
