@@ -7,18 +7,21 @@ const repository = (db) => {
 
   const getLastRentalDetails = (customerid) => {
     return new Promise((resolve, reject) => {
-
-      request(`customer?customer=${customerid}`, { json: true }, (err, res, cbody) => {
+      console.log("*********start invoking all services **********")
+      request('http://customer?=customer' + customerid, { json: true }, (err, res, cbody) => {
+        console.log(cbody)
         let lastrentalNumber = cbody.lastrentalNumber
         let firstname = cbody.firstname
         let lastname = cbody.lastname
-        
-        request(`rental?rental=${lastrentalNumber}`, { json: true }, (err, res, rbody) => {
+
+        request('http://rental?rental='+ lastrentalNumber, { json: true }, (err, res, rbody) => {
+          console.log(rbody)
           let location = rbody.location
           let rentalstartdate = rbody.rentalstartdate
           let rentalenddate = rbody.rentalenddate
 
-          request(`location?location=${location}`, { json: true }, (err, res, lbody) => {
+          request('http://location?location=' + location, { json: true }, (err, res, lbody) => {
+            console.log(lbody)
             let hoursOfOperation = lbody.hoursOfOperation
 
             resolve({
