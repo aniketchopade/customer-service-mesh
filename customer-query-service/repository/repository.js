@@ -1,5 +1,7 @@
 'use strict'
 const request = require('request')
+const customerurl = 'http://customer?=customer' 
+const rentalurl = 'http://rental?rental='
 const repository = (db) => {
   const collection = {
     "movies": "movies"
@@ -8,38 +10,32 @@ const repository = (db) => {
   const getLastRentalDetails = (customerid) => {
     return new Promise((resolve, reject) => {
       console.log("*********start invoking all services **********")
-      request('http://customer?=customer' + customerid, { json: true }, (err, res, cbody) => {
+      request(customerurl + customerid, { json: true }, (err, res, cbody) => {
         console.log(cbody)
         let lastrentalNumber = cbody.lastrentalNumber
         let firstname = cbody.firstname
         let lastname = cbody.lastname
 
-        request('http://rental?rental='+ lastrentalNumber, { json: true }, (err, res, rbody) => {
+        request(rentalurl+ lastrentalNumber, { json: true }, (err, res, rbody) => {
           console.log(rbody)
           let location = rbody.location
           let rentalstartdate = rbody.rentalstartdate
           let rentalenddate = rbody.rentalenddate
+          let hoursOfOperation = rbody.hoursOfOperation
 
-          request('http://location?location=' + location, { json: true }, (err, res, lbody) => {
-            console.log(lbody)
-            let hoursOfOperation = lbody.hoursOfOperation
+          resolve({
+            "rentalNumber": lastrentalNumber,
+            "rentaldetails": {
+              "customerId": customerid,
+              "name": firstname,
+              "lastname": lastname,
+              "rentalstartdate": rentalstartdate,
+              "rentalenddate": rentalenddate,
+              "location": location,
+              "hoursOfOperation": hoursOfOperation
+            }
 
-            resolve({
-              "rentalNumber": lastrentalNumber,
-              "rentaldetails": {
-                "customerId": customerid,
-                "name": firstname,
-                "lastname": lastname,
-                "rentalstartdate": rentalstartdate,
-                "rentalenddate": rentalenddate,
-                "location": location,
-                "hoursofoperation": hoursOfOperation[1]
-              }
-
-            })
-          });
-
-          
+          })
         });          
       });
     })

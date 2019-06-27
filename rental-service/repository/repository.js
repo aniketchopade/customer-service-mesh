@@ -1,4 +1,6 @@
 'use strict'
+const request = require('request')
+const locationurl = 'http://location?location='
 
 const repository = (db) => {
   const collection = {
@@ -7,14 +9,21 @@ const repository = (db) => {
 
   const getRental = (location) => {
     return new Promise((resolve, reject) => {
-        resolve({
-        "rentalnumber": "1212121",
-         "firstname": "aniket",
-         "lastname": "chopade",
-         "location": "JFK",
-         "rentalstartdate": "June 21, 2019 08:00 AM",
-         "rentalenddate": "June 23, 2019 08:00 AM"
-        })
+
+      request(locationurl + location, { json: true }, (err, res, lbody) => {
+            console.log(lbody)
+            let hoursOfOperation = lbody.hoursOfOperation
+            resolve({
+              "rentalnumber": "1212121",
+               "firstname": "aniket",
+               "lastname": "chopade",
+               "location": "JFK",
+               "rentalstartdate": "June 21, 2019 08:00 AM",
+               "rentalenddate": "June 23, 2019 08:00 AM",
+               "hoursOfOperation": hoursOfOperation
+              })
+          });
+        
     })
   }
 
