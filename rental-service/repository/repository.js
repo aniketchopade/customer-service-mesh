@@ -13,20 +13,26 @@ const repository = (db) => {
       request(locationurl + location, { json: true }, (err, res, lbody) => {
             console.log(lbody)
             let hoursOfOperation = lbody.hoursOfOperation
-            resolve({
-              "rentalnumber": "1212121",
-               "firstname": "aniket",
-               "lastname": "chopade",
-               "location": "JFK",
-               "rentalstartdate": "June 21, 2019 08:00 AM",
-               "rentalenddate": "June 23, 2019 08:00 AM",
-               "hoursOfOperation": hoursOfOperation
-              })
+            sleep(2000).then(res =>{
+              resolve({
+                "rentalnumber": "1212121",
+                 "firstname": "aniket",
+                 "lastname": "chopade",
+                 "location": "JFK",
+                 "rentalstartdate": "June 21, 2019 08:00 AM",
+                 "rentalenddate": "June 23, 2019 08:00 AM",
+                 "hoursOfOperation": hoursOfOperation
+                })
+            })
           });
         
     })
   }
-
+  function sleep(ms){
+    return new Promise(resolve=>{
+        setTimeout(resolve,ms)
+    })
+}
   const disconnect = () => {
     db.close()
   }
