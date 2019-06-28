@@ -1,7 +1,7 @@
 'use strict'
 const request = require('request')
-const customerurl = 'http://customer?=customer' 
-const rentalurl = 'http://rental?rental='
+const customerurl = 'http://localhost:3001?=customer' 
+const rentalurl = 'http://localhost:3002?rental='
 const repository = (db) => {
   const collection = {
     "movies": "movies"

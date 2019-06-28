@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-rental-deployment
+spec:
+  selector:
+    matchLabels:
+      run: my-rental 
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: my-rental 
+    spec:
+      containers:
+      - name: customer-query-service
+        image: aniketchopade/customer-query-service
+        ports:
+        - containerPort: 3000
+      - name: customer-service
+        image: aniketchopade/customer-service
+        ports:
+        - containerPort: 3001
+      - name: location-service
+        image: aniketchopade/location-service
+        ports:
+        - containerPort: 3003
+      - name: rental-service
+        image: aniketchopade/rental-service
+        ports:
+        - containerPort: 3002

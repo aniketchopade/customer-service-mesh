@@ -13,7 +13,7 @@ const start = (options) => {
       res.status(500).send('Something went wrong!')
     })
     api(app, options)
-    const server = app.listen(80, () => resolve(server))
+    const server = app.listen(3003, () => resolve(server))
   })
 }
 
