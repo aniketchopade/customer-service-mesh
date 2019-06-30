@@ -1,6 +1,6 @@
 'use strict'
 const request = require('request')
-const locationurl = 'http://location?location='
+const locationurl = `http://${process.env.LOCATION_HOST}:3003?location=`
 
 const repository = (db) => {
   const collection = {
@@ -8,6 +8,7 @@ const repository = (db) => {
   }
 
   const getRental = (location) => {
+    console.log('i am trying to hit ' + locationurl)
     return new Promise((resolve, reject) => {
 
       request(locationurl + location, { json: true }, (err, res, lbody) => {

@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: ra-search
+    app.kubernetes.io/instance: ra-search-demo
+    app.kubernetes.io/version: '1.0.0'
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: ra-search
+    app.kubernetes.io/managed-by: kubectl
+  name: ra-search-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ra-search
+  template:
+    metadata:
+      labels:
+        app: ra-search
+    spec:
+      containers:
+        - command:
+            - npm
+            - start            
+          image: aniketchopade/customer-query-service
+          imagePullPolicy: Always
+          name: ra-search
+          ports:
+            - containerPort: 3000
+          env:
+            - name: RENTAL_HOST
+              value: rental-service
+            - name: CUSTOMER_HOST
+              value: customer-service
+

@@ -1,0 +1,56 @@
+version: '3'
+services:
+  ra-search:
+    build:
+      context: ./customer-query-service
+      dockerfile: Dockerfile
+    image: ra-search:latest
+    ports:
+      - "3000:3000"
+    links:
+      - customer-service
+      - rental-service
+    entrypoint: npm start
+    environment:
+      DOCKER_COMPOSE: 'true'
+      CUSTOMER_PORT: 3001
+      CUSTOMER_HOST: customer-service
+      RENTAL_PORT: 3002
+      RENTAL_HOST: rental-service
+      PORT: 3000
+      
+  customer-service:
+    build:
+      context: ./customer-service
+      dockerfile: Dockerfile
+    image: customer-service:latest
+    ports:
+      - "3001:3001"
+    entrypoint: npm start
+    environment:
+      PORT: 3001
+  rental-service:
+    build:
+      context: ./rental-service
+      dockerfile: Dockerfile
+    image: rental-service:latest
+    entrypoint: npm start
+    ports:
+      - "3002:3002"
+    links:
+      - location-service
+    environment:
+      PORT: 3002
+      LOCATION_PORT: 3003
+      LOCATION_HOST: location-service
+  location-service:
+    build:
+      context: ./location-service
+      dockerfile: Dockerfile
+    image: location-service:latest
+    entrypoint: npm start
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+

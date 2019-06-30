@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: location-service
+    app.kubernetes.io/instance: ra-search-demo
+    app.kubernetes.io/version: '1.0.0'
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: ra-search-demo
+    app.kubernetes.io/managed-by: kubectl
+  name: location-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: location-service
+  template:
+    metadata:
+      labels:
+        app: location-service
+    spec:
+      containers:
+        - image: aniketchopade/location-service
+          imagePullPolicy: Always
+          name: location-service
+          ports:
+            - containerPort: 3003

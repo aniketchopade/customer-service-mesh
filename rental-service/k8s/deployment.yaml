@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: rental-service
+    app.kubernetes.io/instance: ra-search-demo
+    app.kubernetes.io/version: '1.0.0'
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: ra-search-demo
+    app.kubernetes.io/managed-by: kubectl
+  name: rental-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rental-service
+  template:
+    metadata:
+      labels:
+        app: rental-service
+    spec:
+      containers:
+        - image: aniketchopade/rental-service
+          imagePullPolicy: Always
+          name: rental-service
+          ports:
+            - containerPort: 3002
+          env:
+            - name: LOCATION_HOST
+              value: location-service

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: location-service
+    app.kubernetes.io/instance: ra-search-demo
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: ra-search-demo
+    app.kubernetes.io/managed-by: kubectl
+  name: location-service
+spec:
+  selector:
+    app: location-service
+  ports:
+    - port: 3003
+      

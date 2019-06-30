@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . /app
 
-EXPOSE 80
+EXPOSE 3003
 
-CMD ["npm", "start"]
+ENTRYPOINT npm start
